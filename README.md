@@ -1,2 +1,2 @@
 # hangman
-Eighth Odin Project. Hangman
+Eighth Odin Project. Hangman.
