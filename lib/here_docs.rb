@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 # How to play info
-module Information
+module HereDocs
+  private
+
   def rules_doc
-    <<~RULESDOC
+    <<~'RULES'
       The word to guess is represented by a row of dashes,
       representing each letter of the word.
       In most variants, proper nouns, such as names, places, and brands,
@@ -27,6 +29,30 @@ module Information
       However, the guesser can also win by guessing all the letters that
       appear in the word, thereby completing the word, before the diagram
       is completed.
-    RULESDOC
+    RULES
+  end
+
+  def hanged_full
+    <<~'HANG10'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG10
+  end
+
+  def hanged_empty
+    <<~'HANG4'
+        ______
+         |   |
+             |
+             |
+             |
+             |
+      ----------
+    HANG4
   end
 end

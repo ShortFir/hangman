@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'here_docs'
+require_relative 'logo'
 require_relative 'player_input'
 
 # Menu system
 module MenuSystem
-  include Information
+  include HereDocs
   include Logo
   include PlayerInput
 
@@ -19,7 +21,7 @@ module MenuSystem
   end
 
   def display_menu(menu)
-    print new_screen, logo_four, "\n"
+    new_screen
     display_options(menu)
   end
 
@@ -34,6 +36,10 @@ module MenuSystem
   end
 
   def new_screen
+    print clear_screen, logo_four, "\n"
+  end
+
+  def clear_screen
     "\e[H\e[2J"
   end
 end
