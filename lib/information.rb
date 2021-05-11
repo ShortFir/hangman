@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-# To modify the terminal screen
+# How to play info
 module Information
-  def rules
-    <<~HEREDOC
+  def rules_doc
+    <<~RULESDOC
       The word to guess is represented by a row of dashes,
       representing each letter of the word.
       In most variants, proper nouns, such as names, places, and brands,
@@ -27,6 +27,6 @@ module Information
       However, the guesser can also win by guessing all the letters that
       appear in the word, thereby completing the word, before the diagram
       is completed.
-    HEREDOC
+    RULESDOC
   end
 end
