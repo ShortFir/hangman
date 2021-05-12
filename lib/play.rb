@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
+# require 'io/console'
+
+# require 'yaml'
+
 require_relative 'hangman_board'
 require_relative 'here_docs'
 require_relative 'logo'
 require_relative 'menu_system'
+require_relative 'player_input'
 require_relative 'word_list'
 
 # game loop
@@ -11,8 +16,11 @@ class Play
   include HereDocs
   include Logo
   include MenuSystem
+  include PlayerInput
 
-  MAIN_MENU = ['New Game', 'Continue Game', 'How To Play', 'Exit Game'].freeze
+  MAIN_MENU = ['New Game', 'Load Game', 'How To Play', 'Exit Game'].freeze
+  HANG_MENU = ['Save Game', 'End Game'].freeze
+  FILE = 'save/save_game.yaml'
 
   def initialize
     @word_list = WordList.new
@@ -20,7 +28,7 @@ class Play
 
   def game
     catch :exit do
-      loop { menu_system(MAIN_MENU) }
+      loop { menu_system(MAIN_MENU, true) }
     end
   end
 
@@ -28,28 +36,54 @@ class Play
 
   def new_game
     @board = HangmanBoard.new(@word_list.new_word)
+    game_loop
+  end
+
+  def game_loop
     catch :game_over do
       loop { game_system }
     end
-    print "\n", 'Game Over. Word was : ', @board.word
-    gets
   end
 
-  # display secret word at game over
   def game_system
     new_screen
     @board.display
-    throw :game_over if @board.game_over?
-    @board.compare_word(hang_input)
+    end_game if @board.game_over?
+    menu_system(HANG_MENU)
+    # clean up
+    letter = hang_input
+    save_game if letter == '1'
+    end_game if letter == '2'
+    @board.compare_word(letter)
   end
 
-  def continue_game; end
+  def save_game
+    Dir.mkdir('save') unless Dir.exist?('save')
+    File.open(FILE, 'w') do |something|
+      @board.save_yaml(something)
+    end
+  end
+
+  def load_game
+    File.open(FILE, 'r') do |something|
+      @board = HangmanBoard.new(@word_list.new_word)
+      @board = HangmanBoard.load_yaml(@board.save_yaml(something))
+    end
+    game_loop
+  end
 
   def how_to_play
     new_screen
     print rules_doc, "\n"
     print 'Return...'
     gets
+  end
+
+  # Add win loss later
+  def end_game
+    print "\n", 'Game Over. Word was : ', @board.word
+    gets
+    throw :game_over
   end
 
   def exit_game

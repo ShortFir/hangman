@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 # Open file and select words
-# Object
 class WordList
   WORD_FILE = 'doc/5desk.txt'
   MIN_WORD = 5

@@ -4,24 +4,34 @@
 module PlayerInput
   private
 
-  # make it universal? add print, range, optional?
+  # similar methods, but different enough
   def menu_input(range, choice = '')
-    puts
+    # puts
+    print "Enter (1 - #{range}) : "
     loop do
-      print "Enter (1 - #{range}) : "
-      choice = gets.chomp.to_i
+      choice = input_char.to_i
       break if (1..range).include?(choice)
     end
     choice - 1
   end
 
   def hang_input(choice = '')
-    puts
+    print 'Guess A Letter : '
     loop do
-      print 'Enter a letter : '
-      choice = gets.chomp
-      break if choice =~ /[a-zA-Z]/
+      choice = input_char # $stdin.getch
+      break if choice =~ /[12a-zA-Z]/
     end
     choice.downcase
+  end
+
+  # Copied from...
+  # https://stackoverflow.com/questions/174933/how-to-get-a-single-character-without-pressing-enter
+  # Doesn't require io/console
+  def input_char
+    state = `stty -g`
+    `stty raw -echo -icanon isig`
+    $stdin.getc # .chr
+  ensure
+    `stty #{state}`
   end
 end

@@ -1,5 +1,7 @@
 # frozen_string_literal: false
 
+require 'yaml'
+
 require_relative 'here_docs'
 
 # Display board, provide feedback
@@ -7,7 +9,8 @@ class HangmanBoard
   include HereDocs
 
   GAME_LENGTH = 6
-  attr_reader :word
+
+  attr_accessor :word, :hidden, :wrong, :alphabet
 
   def initialize(word)
     @word = word.downcase
@@ -26,6 +29,7 @@ class HangmanBoard
     show(@hidden)
     print "\n", "Fails (#{GAME_LENGTH}) : "
     show(@wrong)
+    print "\n"
   end
 
   def compare_word(letter)
@@ -37,6 +41,25 @@ class HangmanBoard
 
   def game_over?
     @wrong.length == GAME_LENGTH || @word == @hidden
+  end
+
+  # Yaml might be deprecated? or just the method
+  def save_yaml(something)
+    YAML.dump(
+      {
+        word: @word,
+        hidden: @hidden,
+        wrong: @wrong,
+        alphabet: @alphabet
+      }, something
+    )
+  end
+
+  # Psych replacing yaml?... I dunno
+  def self.load_yaml(stuff)
+    data = YAML.load stuff
+    p data
+    new(data[:word], data[:hidden], data[:wrong], data[:alphabet])
   end
 
   private

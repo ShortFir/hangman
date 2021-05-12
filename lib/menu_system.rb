@@ -1,27 +1,23 @@
 # frozen_string_literal: true
 
-require_relative 'here_docs'
-require_relative 'logo'
-require_relative 'player_input'
-
 # Menu system
 module MenuSystem
-  include HereDocs
-  include Logo
-  include PlayerInput
-
   JUSTIFY = 1
 
   private
 
-  def menu_system(menu)
-    display_menu(menu)
+  # rubocop:disable Style/OptionalBooleanParameter
+  def menu_system(menu, extras = false)
+    display_menu(menu, extras)
+    return unless extras
+
     choice = menu_input(menu.length)
     send(string_to_method(menu[choice]))
   end
+  # rubocop:enable Style/OptionalBooleanParameter
 
-  def display_menu(menu)
-    new_screen
+  def display_menu(menu, extras)
+    new_screen if extras
     display_options(menu)
   end
 
@@ -29,6 +25,7 @@ module MenuSystem
     options.each_with_index do |item, index|
       puts "#{(index + 1).to_s.rjust(JUSTIFY)}: #{item}"
     end
+    puts
   end
 
   def string_to_method(menu)
