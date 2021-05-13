@@ -10,7 +10,8 @@ class HangmanBoard
 
   GAME_LENGTH = 6
 
-  attr_accessor :word, :hidden, :wrong, :alphabet
+  # attr_accessor :word, :hidden, :wrong, :alphabet
+  attr_reader :word
 
   def initialize(word)
     @word = word.downcase
@@ -19,6 +20,7 @@ class HangmanBoard
     @alphabet = build_alphabet
   end
 
+  # countdown fails left
   def display
     puts hanged_full
     print "\n", 'Alphabet  : '

@@ -41,6 +41,7 @@ class Play
     end
   end
 
+  # goto menu from hangscreen? save load exit etc...?
   def game_system
     new_screen
     @board.display
@@ -60,8 +61,9 @@ class Play
     end
   end
 
+  # check if file exist
   def load_game
-    @board = HangmanBoard.new(@word_list.new_word)
+    @board = HangmanBoard.new('')
     File.open(FILE, 'r') do |file|
       @board.load_yaml(file)
     end
@@ -76,6 +78,7 @@ class Play
   end
 
   # Add win loss later
+  # can enter letters after word. FIX
   def end_game
     print "\n", 'Game Over. Word was : ', @board.word
     gets
