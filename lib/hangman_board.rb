@@ -43,23 +43,23 @@ class HangmanBoard
     @wrong.length == GAME_LENGTH || @word == @hidden
   end
 
-  # Yaml might be deprecated? or just the method
-  def save_yaml(something)
+  def save_yaml(file)
     YAML.dump(
       {
         word: @word,
         hidden: @hidden,
         wrong: @wrong,
         alphabet: @alphabet
-      }, something
+      }, file
     )
   end
 
-  # Psych replacing yaml?... I dunno
-  def self.load_yaml(stuff)
-    data = YAML.load stuff
-    p data
-    new(data[:word], data[:hidden], data[:wrong], data[:alphabet])
+  def load_yaml(file)
+    data = YAML.load_file(file)
+    @word = data[:word]
+    @hidden = data[:hidden]
+    @wrong =  data[:wrong]
+    @alphabet = data[:alphabet]
   end
 
   private

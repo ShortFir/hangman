@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# require 'io/console'
-
-# require 'yaml'
-
 require_relative 'hangman_board'
 require_relative 'here_docs'
 require_relative 'logo'
@@ -11,7 +7,7 @@ require_relative 'menu_system'
 require_relative 'player_input'
 require_relative 'word_list'
 
-# game loop
+# Game loop
 class Play
   include HereDocs
   include Logo
@@ -59,15 +55,15 @@ class Play
 
   def save_game
     Dir.mkdir('save') unless Dir.exist?('save')
-    File.open(FILE, 'w') do |something|
-      @board.save_yaml(something)
+    File.open(FILE, 'w') do |file|
+      @board.save_yaml(file)
     end
   end
 
   def load_game
-    File.open(FILE, 'r') do |something|
-      @board = HangmanBoard.new(@word_list.new_word)
-      @board = HangmanBoard.load_yaml(@board.save_yaml(something))
+    @board = HangmanBoard.new(@word_list.new_word)
+    File.open(FILE, 'r') do |file|
+      @board.load_yaml(file)
     end
     game_loop
   end
