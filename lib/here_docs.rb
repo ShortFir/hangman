@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 # How to play info
-module HereDocs
+module HowToPlay
   private
 
-  def rules_doc
-    <<~'RULES'
+  def how_to_play
+    <<~'HOWTOPLAY'
       The word to guess is represented by a row of dashes,
       representing each letter of the word.
       In most variants, proper nouns, such as names, places, and brands,
@@ -29,10 +29,13 @@ module HereDocs
       However, the guesser can also win by guessing all the letters that
       appear in the word, thereby completing the word, before the diagram
       is completed.
-    RULES
+    HOWTOPLAY
   end
+end
 
-  def hanged_full
+# Pictures of HangedMen
+module HangedMen
+  def hanged10
     <<~'HANG10'
         ______
          |   |
@@ -44,7 +47,67 @@ module HereDocs
     HANG10
   end
 
-  def hanged_empty
+  def hanged9
+    <<~'HANG9'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG9
+  end
+
+  def hanged8
+    <<~'HANG8'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG8
+  end
+
+  def hanged7
+    <<~'HANG7'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG7
+  end
+
+  def hanged6
+    <<~'HANG6'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG6
+  end
+
+  def hanged5
+    <<~'HANG5'
+        ______
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+      ----------
+    HANG5
+  end
+
+  def hanged4
     <<~'HANG4'
         ______
          |   |

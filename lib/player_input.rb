@@ -4,10 +4,9 @@
 module PlayerInput
   private
 
-  # similar methods, but different enough
+  # similar methods, or different enough?
   def menu_input(range, choice = '')
-    # puts
-    print "Enter (1 - #{range}) : "
+    print "\n", "Enter (1 - #{range}) : "
     loop do
       choice = input_char.to_i
       break if (1..range).include?(choice)
@@ -16,17 +15,19 @@ module PlayerInput
   end
 
   def hang_input(choice = '')
-    print 'Guess A Letter : '
+    print "\n", 'Guess A Letter : '
     loop do
       choice = input_char # $stdin.getch
-      break if choice =~ /[12a-zA-Z]/
+      break if choice =~ /[12a-z]/
     end
-    choice.downcase
+    choice
   end
 
-  def await_enter
+  def pause_continue
     # temp
-    gets
+    print "\n", 'Press spacebar to continue...'
+    until input_char == ' '
+    end
   end
 
   # Copied from...

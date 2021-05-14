@@ -9,7 +9,8 @@ require_relative 'word_list'
 
 # Game loop
 class Play
-  include HereDocs
+  include HangedMen
+  include HowToPlay
   include Logo
   include MenuSystem
   include PlayerInput
@@ -24,7 +25,7 @@ class Play
 
   def game
     catch :exit do
-      loop { menu_system(MAIN_MENU, true) }
+      loop { menu_system(MAIN_MENU, extras: true) }
     end
   end
 
@@ -42,16 +43,18 @@ class Play
   end
 
   # goto menu from hangscreen? save load exit etc...?
+  # clean up? though it works currently so...
   def game_system
     new_screen
     @board.display
-    end_game if @board.game_over?
+    case @board.win_or_fail
+    when 'win' then end_game(win: true)
+    when 'fail' then end_game(fail: true); end
     menu_system(HANG_MENU)
-    # clean up
-    letter = hang_input
-    save_game if letter == '1'
-    end_game if letter == '2'
-    @board.compare_word(letter)
+    case input = hang_input
+    when '1' then save_game
+    when '2' then end_game
+    else @board.compare_word(input); end
   end
 
   def save_game
@@ -65,30 +68,33 @@ class Play
       File.open(FILE, 'r') { |file| @board = HangmanBoard.load_yaml(file) }
       game_loop
     else
-      # temp
-      puts 'no file exists'
-      await_enter
+      # temp...
+      puts 'File does not exist.'
+      pause_continue
     end
   end
 
   def how_to_play
     new_screen
-    print rules_doc, "\n"
-    print 'Return...'
-    await_enter
+    print rules_doc
+    pause_continue
   end
 
-  # Add win loss later
-  # can enter letters after word. FIX
-  def end_game
-    print "\n", 'Game Over. Word was : ', @board.word
-    await_enter
+  def end_game(win: false, fail: false)
+    if win
+      print '---YOU WIN---', "\n"
+      pause_continue
+    elsif fail
+      print 'Game Over! Hidden word was... ', @board.word, "\n"
+      pause_continue
+    end
     throw :game_over
   end
 
   def exit_game
     print clear_screen
-    print 'So long friendo...', "\n\n"
+    print "\"What business is it of yours where I'm from, friendo?\"", "\n"
+    print '-- Anton Chigurh : No Country for Old Men', "\n\n"
     throw :exit
   end
 end

@@ -6,15 +6,13 @@ module MenuSystem
 
   private
 
-  # rubocop:disable Style/OptionalBooleanParameter
-  def menu_system(menu, extras = false)
+  def menu_system(menu, extras: false)
     display_menu(menu, extras)
     return unless extras
 
     choice = menu_input(menu.length)
     send(string_to_method(menu[choice]))
   end
-  # rubocop:enable Style/OptionalBooleanParameter
 
   def display_menu(menu, extras)
     new_screen if extras
@@ -23,9 +21,8 @@ module MenuSystem
 
   def display_options(options)
     options.each_with_index do |item, index|
-      puts "#{(index + 1).to_s.rjust(JUSTIFY)}: #{item}"
+      print "#{(index + 1).to_s.rjust(JUSTIFY)}: #{item}", "\n"
     end
-    puts
   end
 
   def string_to_method(menu)

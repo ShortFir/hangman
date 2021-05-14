@@ -6,7 +6,8 @@ require_relative 'here_docs'
 
 # Display board, provide feedback
 class HangmanBoard
-  include HereDocs
+  include HangedMen
+  include HowToPlay
 
   GAME_LENGTH = 6
 
@@ -26,7 +27,7 @@ class HangmanBoard
   end
 
   def display
-    puts hanged_full
+    puts hanged10
     print "\n", 'Alphabet  : '
     print_alphabet
     # print "\n", 'Secret    : '
@@ -45,8 +46,10 @@ class HangmanBoard
     @word.include?(letter) ? correct_letter(letter) : wrong_letter(letter)
   end
 
-  def game_over?
-    @wrong.length == GAME_LENGTH || @word == @hidden
+  def win_or_fail
+    if @word == @hidden then 'win'
+    elsif @wrong.length == GAME_LENGTH then 'fail'
+    end
   end
 
   def save_yaml(file)
