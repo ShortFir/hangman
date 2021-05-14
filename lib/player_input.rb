@@ -4,7 +4,6 @@
 module PlayerInput
   private
 
-  # similar methods, or different enough?
   def menu_input(range, choice = '')
     print "\n", "Enter (1 - #{range}) : "
     loop do
@@ -17,14 +16,13 @@ module PlayerInput
   def hang_input(choice = '')
     print "\n", 'Guess A Letter : '
     loop do
-      choice = input_char # $stdin.getch
+      choice = input_char
       break if choice =~ /[12a-z]/
     end
     choice
   end
 
   def pause_continue
-    # temp
     print "\n", 'Press spacebar to continue...'
     until input_char == ' '
     end

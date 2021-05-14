@@ -42,25 +42,43 @@ class Play
     end
   end
 
-  # goto menu from hangscreen? save load exit etc...?
-  # clean up? though it works currently so...
   def game_system
     new_screen
     @board.display
-    case @board.win_or_fail
-    when 'win' then end_game(win: true)
-    when 'fail' then end_game(fail: true); end
+    game_system_win_fail
     menu_system(HANG_MENU)
-    case input = hang_input
-    when '1' then save_game
-    when '2' then end_game
-    else @board.compare_word(input); end
+    game_system_input
   end
 
+  def game_system_win_fail
+    case @board.win_or_fail
+    when 'win' then end_game(win: true)
+    when 'fail' then end_game(fail: true)
+    end
+  end
+
+  def game_system_input
+    case input = hang_input
+    when '1'
+      save_game
+      save_message
+    when '2' then end_game
+    else @board.compare_word(input)
+    end
+  end
+
+  # Block automatically closes files after use.
   def save_game
     Dir.mkdir('save') unless Dir.exist?('save')
-    # Block automatically closes file after use.
     File.open(FILE, 'w') { |file| @board.save_yaml(file) }
+  end
+
+  def save_message
+    new_screen
+    @board.display
+    puts 'Game Saved. Exiting...'
+    pause_continue
+    end_game
   end
 
   def load_game
@@ -68,8 +86,7 @@ class Play
       File.open(FILE, 'r') { |file| @board = HangmanBoard.load_yaml(file) }
       game_loop
     else
-      # temp...
-      puts 'File does not exist.'
+      puts "\n\n", 'File does not exist.'
       pause_continue
     end
   end
@@ -83,14 +100,16 @@ class Play
   def end_game(win: false, fail: false)
     if win
       print '---------- YOU WIN ----------', "\n"
-      pause_continue
     elsif fail
       print 'Game Over! Hidden word was... ', @board.word, "\n"
-      pause_continue
     end
+    pause_continue if win || fail
     throw :game_over
   end
 
+  # This is here because I was using the word friendo originally to say goodbye.
+  # "So long friendo", then wondered what the actual quote was.
+  # Kind of an appropriate movie character for a game that's technically about hanging people.
   def exit_game
     print clear_screen
     print "\"What business is it of yours where I'm from, friendo?\"", "\n"
