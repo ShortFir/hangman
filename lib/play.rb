@@ -56,32 +56,33 @@ class Play
 
   def save_game
     Dir.mkdir('save') unless Dir.exist?('save')
-    File.open(FILE, 'w') do |file|
-      @board.save_yaml(file)
-    end
+    # Block automatically closes file after use.
+    File.open(FILE, 'w') { |file| @board.save_yaml(file) }
   end
 
-  # check if file exist
   def load_game
-    @board = HangmanBoard.new('')
-    File.open(FILE, 'r') do |file|
-      @board.load_yaml(file)
+    if File.exist?(FILE)
+      File.open(FILE, 'r') { |file| @board = HangmanBoard.load_yaml(file) }
+      game_loop
+    else
+      # temp
+      puts 'no file exists'
+      await_enter
     end
-    game_loop
   end
 
   def how_to_play
     new_screen
     print rules_doc, "\n"
     print 'Return...'
-    gets
+    await_enter
   end
 
   # Add win loss later
   # can enter letters after word. FIX
   def end_game
     print "\n", 'Game Over. Word was : ', @board.word
-    gets
+    await_enter
     throw :game_over
   end
 

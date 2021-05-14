@@ -24,6 +24,11 @@ module PlayerInput
     choice.downcase
   end
 
+  def await_enter
+    # temp
+    gets
+  end
+
   # Copied from...
   # https://stackoverflow.com/questions/174933/how-to-get-a-single-character-without-pressing-enter
   # Doesn't require io/console

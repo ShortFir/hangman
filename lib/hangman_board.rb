@@ -10,17 +10,21 @@ class HangmanBoard
 
   GAME_LENGTH = 6
 
-  # attr_accessor :word, :hidden, :wrong, :alphabet
   attr_reader :word
 
-  def initialize(word)
+  # Can use load_yaml as class method.
+  def initialize(
+    word,
+    hidden = hide_word(word.length),
+    wrong = '',
+    alphabet = build_alphabet
+  )
     @word = word.downcase
-    @hidden = hide_word(word.length)
-    @wrong = ''
-    @alphabet = build_alphabet
+    @hidden = hidden
+    @wrong = wrong
+    @alphabet = alphabet
   end
 
-  # countdown fails left
   def display
     puts hanged_full
     print "\n", 'Alphabet  : '
@@ -29,7 +33,7 @@ class HangmanBoard
     # show(@word)
     print "\n", 'Word      : '
     show(@hidden)
-    print "\n", "Fails (#{GAME_LENGTH}) : "
+    print "\n", "Tries (#{GAME_LENGTH - @wrong.length}) : "
     show(@wrong)
     print "\n"
   end
@@ -56,12 +60,14 @@ class HangmanBoard
     )
   end
 
-  def load_yaml(file)
+  def self.load_yaml(file)
     data = YAML.load_file(file)
-    @word = data[:word]
-    @hidden = data[:hidden]
-    @wrong =  data[:wrong]
-    @alphabet = data[:alphabet]
+    new(
+      @word = data[:word],
+      @hidden = data[:hidden],
+      @wrong =  data[:wrong],
+      @alphabet = data[:alphabet]
+    )
   end
 
   private
