@@ -23,6 +23,7 @@ class Play
     @word_list = WordList.new
   end
 
+  # Add in option to change amount of guesses. + menu etc...
   def game
     catch :exit do
       loop { menu_system(MAIN_MENU, extras: true) }
@@ -111,7 +112,7 @@ class Play
   # "So long friendo", then wondered what the actual quote was.
   # Kind of an appropriate movie character for a game that's technically about hanging people.
   def exit_game
-    print clear_screen
+    print clear_screen, "\n"
     print "\"What business is it of yours where I'm from, friendo?\"", "\n"
     print '-- Anton Chigurh : No Country for Old Men', "\n\n"
     throw :exit

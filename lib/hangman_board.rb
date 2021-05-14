@@ -10,7 +10,7 @@ class HangmanBoard
   include HowToPlay
 
   GAME_LENGTH_MAX = 10
-  GAME_LENGTH = 10
+  GAME_LENGTH = 9
 
   attr_reader :word
 
@@ -29,15 +29,27 @@ class HangmanBoard
 
   def display
     puts show_hangedman
-    print "\n", 'Alphabet  : '
-    print_alphabet
-    # print "\n", 'Secret    : '
-    # show(@word)
-    print "\n", 'Word      : '
-    show(@hidden)
-    print "\n", "Tries (#{GAME_LENGTH - @wrong.length}) : "
-    show(@wrong)
-    print "\n"
+    puts display_info
+  end
+
+  def display_alt
+    puts show_hangedman
+    print "\n", "Alphabet  : #{spaced_alphabet}", "\n"
+    print "\n", "Word      : #{show(@hidden)}", "\n"
+    print "\n", "Tries #{GAME_LENGTH - @wrong.length}/#{GAME_LENGTH} : #{show(@wrong)}", "\n"
+  end
+
+  def display_info
+    space = GAME_LENGTH == GAME_LENGTH_MAX ? '  ' : ''
+    <<~HANGEDINFO
+
+      Alphabet #{space} : #{spaced_alphabet}
+
+      Word #{space}     : #{show(@hidden)}
+
+      Tries #{GAME_LENGTH - @wrong.length}/#{GAME_LENGTH} : #{show(@wrong)}
+
+    HANGEDINFO
   end
 
   def compare_word(letter)
@@ -95,8 +107,8 @@ class HangmanBoard
   end
 
   def show(word)
-    word.split('').each { |char| print "#{char} " }
-    puts
+    word.split('').each_with_object('') { |char, s| s << "#{char} " }
+    # puts
   end
 
   def hide_word(length, hidden = '')
@@ -104,9 +116,8 @@ class HangmanBoard
     hidden
   end
 
-  def print_alphabet
-    @alphabet.each { |char| print "#{char} " }
-    puts
+  def spaced_alphabet
+    @alphabet.each_with_object('') { |char, s| s << "#{char} " }
   end
 
   def build_alphabet
