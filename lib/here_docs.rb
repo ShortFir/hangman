@@ -4,7 +4,7 @@
 module HowToPlay
   private
 
-  def how_to_play
+  def play_rules
     <<~'HOWTOPLAY'
       The word to guess is represented by a row of dashes,
       representing each letter of the word.
@@ -34,88 +34,138 @@ module HowToPlay
 end
 
 # Pictures of HangedMen
+# rubocop:disable Metrics/ModuleLength
 module HangedMen
   def hanged10
     <<~'HANG10'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                   /O\  |
+                   / \  |
+                ________|_
+      ---------/----------\---------
     HANG10
   end
 
   def hanged9
     <<~'HANG9'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                   /O\  |
+                   /    |
+                ________|_
+      ---------/----------\---------
     HANG9
   end
 
   def hanged8
     <<~'HANG8'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                   /O\  |
+                        |
+                ________|_
+      ---------/----------\---------
     HANG8
   end
 
   def hanged7
     <<~'HANG7'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                   /O   |
+                        |
+                ________|_
+      ---------/----------\---------
     HANG7
   end
 
   def hanged6
     <<~'HANG6'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                    O   |
+                        |
+                ________|_
+      ---------/----------\---------
     HANG6
   end
 
   def hanged5
     <<~'HANG5'
-        ______
-         |   |
-         O   |
-        /|\  |
-        / \  |
-             |
-      ----------
+                    _____
+                    |   |
+                    o   |
+                        |
+                        |
+                ________|_
+      ---------/----------\---------
     HANG5
   end
 
   def hanged4
     <<~'HANG4'
-        ______
-         |   |
-             |
-             |
-             |
-             |
-      ----------
+                    _____
+                    |   |
+                        |
+                        |
+                        |
+                ________|_
+      ---------/----------\---------
     HANG4
   end
+
+  def hanged3
+    <<~'HANG3'
+                    _____
+                        |
+                        |
+                        |
+                        |
+                ________|_
+      ---------/----------\---------
+    HANG3
+  end
+
+  def hanged2
+    <<~'HANG2'
+
+                        |
+                        |
+                        |
+                        |
+                ________|_
+      ---------/----------\---------
+    HANG2
+  end
+
+  def hanged1
+    <<~'HANG1'
+
+
+
+
+
+                __________
+      ---------/----------\---------
+    HANG1
+  end
+
+  def hanged0
+    <<~'HANG0'
+
+
+
+
+
+
+      ------------------------------
+    HANG0
+  end
 end
+# rubocop:enable Metrics/ModuleLength

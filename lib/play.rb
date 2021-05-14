@@ -76,13 +76,13 @@ class Play
 
   def how_to_play
     new_screen
-    print rules_doc
+    print play_rules
     pause_continue
   end
 
   def end_game(win: false, fail: false)
     if win
-      print '---YOU WIN---', "\n"
+      print '---------- YOU WIN ----------', "\n"
       pause_continue
     elsif fail
       print 'Game Over! Hidden word was... ', @board.word, "\n"

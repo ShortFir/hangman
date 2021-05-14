@@ -9,7 +9,8 @@ class HangmanBoard
   include HangedMen
   include HowToPlay
 
-  GAME_LENGTH = 6
+  GAME_LENGTH_MAX = 10
+  GAME_LENGTH = 10
 
   attr_reader :word
 
@@ -27,7 +28,7 @@ class HangmanBoard
   end
 
   def display
-    puts hanged10
+    puts show_hangedman
     print "\n", 'Alphabet  : '
     print_alphabet
     # print "\n", 'Secret    : '
@@ -74,6 +75,11 @@ class HangmanBoard
   end
 
   private
+
+  def show_hangedman
+    hangman = "hanged#{(GAME_LENGTH_MAX - GAME_LENGTH) + @wrong.length}"
+    send(hangman)
+  end
 
   def correct_letter(letter)
     @word.split('').each_with_index do |char, index|
