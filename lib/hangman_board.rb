@@ -47,9 +47,9 @@ class HangmanBoard
     space = @game_length == GAME_LENGTH_MAX ? '  ' : ''
     <<~HANGEDINFO
 
-      Alphabet #{space} : #{spaced_alphabet}
+      Alphabet  #{space}: #{spaced_alphabet}
 
-      Word #{space}     : #{show(@hidden)}
+      Word      #{space}: #{show(@hidden)}
 
       Tries #{@game_length - @wrong.length}/#{@game_length} : #{show(@wrong)}
 
@@ -114,7 +114,6 @@ class HangmanBoard
 
   def show(word)
     word.split('').each_with_object('') { |char, s| s << "#{char} " }
-    # puts
   end
 
   def hide_word(length, hidden = '')

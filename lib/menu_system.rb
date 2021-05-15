@@ -7,19 +7,16 @@ module MenuSystem
   private
 
   # Return send(method) or integer
-  # Array due to options menu. Testing.
-  def menu_system(menu = Array.new(10, '1'), method: false, number: false)
-    display_menu(menu, method)
-    # return unless method || number
-    # choice = menu_input(menu.length)
-    # return unless method
-    # send(string_to_method(menu[choice - 1]))
+  def menu_system(menu, method: false, number: false)
+    display_menu(menu, method, number)
     choice = menu_input(menu.length) if method || number
+    return choice if number
+
     send(string_to_method(menu[choice - 1])) if method
   end
 
-  def display_menu(menu, method)
-    new_screen if method
+  def display_menu(menu, method, number)
+    new_screen if method || number
     display_options(menu)
   end
 
@@ -42,7 +39,7 @@ module MenuSystem
   end
 
   def load_error
-    puts "\n\n", 'File does not exist.'
+    puts "\n\n", 'Save folder empty.'
     pause_continue
   end
 
@@ -64,7 +61,7 @@ module MenuSystem
   end
 
   # https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
-  # \e     = ESC
+  # ESC    = \e
   # ESC[H  = Moves cursor to home position (0,0)
   # ESC[2J = Clears entire screen
   def clear_screen
