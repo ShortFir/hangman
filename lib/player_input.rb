@@ -10,7 +10,7 @@ module PlayerInput
       choice = input_char.to_i
       break if (1..range).include?(choice)
     end
-    choice - 1
+    choice
   end
 
   def hang_input(choice = '')
@@ -18,6 +18,18 @@ module PlayerInput
     loop do
       choice = input_char
       break if choice =~ /[12a-z]/
+    end
+    choice
+  end
+
+  def options_input(choice = '')
+    # Save cursor position.
+    print 'Enter new amount :', "\e[s"
+    loop do
+      break if (1..10).include?(choice = gets.chomp.to_i)
+
+      # Return to cursor save. Clear from cursor to end of line.
+      print "\e[u\e[0K"
     end
     choice
   end

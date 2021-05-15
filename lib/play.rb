@@ -15,25 +15,28 @@ class Play
   include MenuSystem
   include PlayerInput
 
-  MAIN_MENU = ['New Game', 'Load Game', 'How To Play', 'Exit Game'].freeze
+  # These are converted to method names, so must align correctly.
+  MAIN_MENU = ['New Game', 'Load Game', 'Options', 'How To Play', 'Exit Game'].freeze
   HANG_MENU = ['Save Game', 'End Game'].freeze
   FILE = 'save/save_game.yaml'
 
   def initialize
     @word_list = WordList.new
+    @new_length = HangmanBoard::GAME_LENGTH_DEFAULT
   end
 
   # Add in option to change amount of guesses. + menu etc...
+  # multiple saves?
   def game
     catch :exit do
-      loop { menu_system(MAIN_MENU, extras: true) }
+      loop { menu_system(MAIN_MENU, method: true) }
     end
   end
 
   private
 
   def new_game
-    @board = HangmanBoard.new(@word_list.new_word)
+    @board = HangmanBoard.new(@word_list.new_word, game_length: @new_length)
     game_loop
   end
 
@@ -51,6 +54,7 @@ class Play
     game_system_input
   end
 
+  # Because there are three outcomes, rather than a ternary.
   def game_system_win_fail
     case @board.win_or_fail
     when 'win' then end_game(win: true)
@@ -74,22 +78,19 @@ class Play
     File.open(FILE, 'w') { |file| @board.save_yaml(file) }
   end
 
-  def save_message
-    new_screen
-    @board.display
-    puts 'Game Saved. Exiting...'
-    pause_continue
-    end_game
-  end
-
   def load_game
     if File.exist?(FILE)
       File.open(FILE, 'r') { |file| @board = HangmanBoard.load_yaml(file) }
       game_loop
     else
-      puts "\n\n", 'File does not exist.'
-      pause_continue
+      load_error
     end
+  end
+
+  def options
+    new_screen
+    puts options_info
+    @new_length = options_input
   end
 
   def how_to_play
@@ -100,10 +101,11 @@ class Play
 
   def end_game(win: false, fail: false)
     if win
-      print '---------- YOU WIN ----------', "\n"
+      puts '---------- YOU WIN ----------'
     elsif fail
       print 'Game Over! Hidden word was... ', @board.word, "\n"
     end
+    # Because end game from hangman screen doesn't need a pause.
     pause_continue if win || fail
     throw :game_over
   end

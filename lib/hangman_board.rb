@@ -10,8 +10,10 @@ class HangmanBoard
   include HowToPlay
 
   GAME_LENGTH_MAX = 10
-  GAME_LENGTH = 9
+  GAME_LENGTH_MIN = 1
+  GAME_LENGTH_DEFAULT = 6
 
+  attr_writer :game_length
   attr_reader :word
 
   # Can use load_yaml as class method.
@@ -19,12 +21,14 @@ class HangmanBoard
     word,
     hidden = hide_word(word.length),
     wrong = '',
-    alphabet = build_alphabet
+    alphabet = build_alphabet,
+    game_length: GAME_LENGTH_DEFAULT
   )
-    @word = word.downcase
+    @word = word
     @hidden = hidden
     @wrong = wrong
     @alphabet = alphabet
+    @game_length = game_length
   end
 
   def display
@@ -36,18 +40,18 @@ class HangmanBoard
     puts show_hangedman
     print "\n", "Alphabet  : #{spaced_alphabet}", "\n"
     print "\n", "Word      : #{show(@hidden)}", "\n"
-    print "\n", "Tries #{GAME_LENGTH - @wrong.length}/#{GAME_LENGTH} : #{show(@wrong)}", "\n"
+    print "\n", "Tries #{@game_length - @wrong.length}/#{@game_length} : #{show(@wrong)}", "\n"
   end
 
   def display_info
-    space = GAME_LENGTH == GAME_LENGTH_MAX ? '  ' : ''
+    space = @game_length == GAME_LENGTH_MAX ? '  ' : ''
     <<~HANGEDINFO
 
       Alphabet #{space} : #{spaced_alphabet}
 
       Word #{space}     : #{show(@hidden)}
 
-      Tries #{GAME_LENGTH - @wrong.length}/#{GAME_LENGTH} : #{show(@wrong)}
+      Tries #{@game_length - @wrong.length}/#{@game_length} : #{show(@wrong)}
 
     HANGEDINFO
   end
@@ -61,7 +65,7 @@ class HangmanBoard
 
   def win_or_fail
     if @word == @hidden then 'win'
-    elsif @wrong.length == GAME_LENGTH then 'fail'
+    elsif @wrong.length == @game_length then 'fail'
     end
   end
 
@@ -71,7 +75,8 @@ class HangmanBoard
         word: @word,
         hidden: @hidden,
         wrong: @wrong,
-        alphabet: @alphabet
+        alphabet: @alphabet,
+        game_length: @game_length
       }, file
     )
   end
@@ -82,14 +87,15 @@ class HangmanBoard
       @word = data[:word],
       @hidden = data[:hidden],
       @wrong =  data[:wrong],
-      @alphabet = data[:alphabet]
+      @alphabet = data[:alphabet],
+      game_length: data[:game_length]
     )
   end
 
   private
 
   def show_hangedman
-    hangman = "hanged#{(GAME_LENGTH_MAX - GAME_LENGTH) + @wrong.length}"
+    hangman = "hanged#{(GAME_LENGTH_MAX - @game_length) + @wrong.length}"
     send(hangman)
   end
 
