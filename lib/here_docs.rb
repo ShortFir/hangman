@@ -1,10 +1,34 @@
 # frozen_string_literal: true
 
-# How to play info
+# How to play information.
 module HowToPlay
   private
 
   def play_rules
+    <<~'HOWTOPLAY'
+      A word to guess is represented by a row of
+      dashes, representing each letter of the word.
+
+      If the guessing player types a letter which
+      occurs in the word, the computer writes it in
+      all its correct positions.
+
+      If the suggested letter does not occur in the
+      word, the computer draws one element of a hanged
+      man stick figure as a tally mark.
+
+      If the guesser makes enough incorrect guesses to
+      allow the computer to complete the diagram, the
+      game is over.
+
+      The guesser can win by guessing all the letters
+      that appear in the word, thereby completing the
+      word, before the hangedman diagram is completed.
+    HOWTOPLAY
+  end
+
+  # From the Wikipedia article.
+  def play_rules_orig
     <<~'HOWTOPLAY'
       The word to guess is represented by a row of dashes,
       representing each letter of the word.
@@ -33,9 +57,11 @@ module HowToPlay
   end
 end
 
-# Pictures of HangedMen
+# Progressing diagram of HangedMen.
 # rubocop:disable Metrics/ModuleLength
 module HangedMen
+  private
+
   def hanged10
     <<~'HANG10'
                     _____

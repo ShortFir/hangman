@@ -5,6 +5,7 @@ require_relative 'here_docs'
 require_relative 'logo'
 require_relative 'menu_system'
 require_relative 'player_input'
+require_relative 'save_load'
 require_relative 'word_list'
 
 # Game loop
@@ -14,21 +15,17 @@ class Play
   include Logo
   include MenuSystem
   include PlayerInput
+  include SaveLoad
 
-  # These are converted to method names, so must align correctly.
+  # These are converted to method names.
   MAIN_MENU = ['New Game', 'Load Game', 'Options', 'How To Play', 'Exit Game'].freeze
   HANG_MENU = ['Save Game', 'End Game'].freeze
-
-  SAVE_DIR = 'save/'
-  FILE_TYPE = '.yaml'
-  TIME_FORMAT = '%Y-%m-%d--%H:%M:%S'
 
   def initialize
     @word_list = WordList.new
     @new_length = HangmanBoard::GAME_LENGTH_DEFAULT
   end
 
-  # multiple saves?
   def game
     catch :exit do
       loop { menu_system(MAIN_MENU, method: true) }
@@ -74,33 +71,7 @@ class Play
     end
   end
 
-  # Block automatically closes files after use.
-  def save_game
-    Dir.mkdir(SAVE_DIR) unless Dir.exist?(SAVE_DIR)
-    file_name = create_save_name
-    File.open(file_name, 'w') { |file| @board.save_yaml(file) }
-  end
-
-  def create_save_name
-    current_time = Time.new.strftime(TIME_FORMAT)
-    "#{SAVE_DIR}#{current_time}#{FILE_TYPE}"
-  end
-
-  def load_game
-    if Dir["#{SAVE_DIR}*#{FILE_TYPE}"].count < 1
-      load_error
-      return
-    end
-    file_name = select_save_file
-    File.open(file_name, 'r') { |file| @board = HangmanBoard.load_yaml(file) }
-    game_loop
-  end
-
-  def select_save_file
-    saves = Dir["#{SAVE_DIR}*#{FILE_TYPE}"].sort
-    file_index = menu_system(saves, number: true) - 1
-    saves[file_index]
-  end
+  # Save save_game load_game in module.
 
   def options
     new_screen
