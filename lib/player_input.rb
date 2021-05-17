@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'io/console'
+
 # Get input from player(human)
 module PlayerInput
   private
@@ -42,12 +44,34 @@ module PlayerInput
 
   # Copied from...
   # https://stackoverflow.com/questions/174933/how-to-get-a-single-character-without-pressing-enter
-  # Doesn't require io/console
+  #
+  # https://man7.org/linux/man-pages/man1/stty.1.html
+  # stty    --- change and print terminal line settings
+  # stty -g --- saves current settings
+  # raw     --- disable most stuff (including icanon, isig)
+  # -echo   --- disable echo input characters
+  #           - so no characters appear when typing
+  # -icanon --- disable special characters: erase, kill, werase, rprnt
+  # isig    --- enable interrupt, quit, and suspend special characters
+  #           - So Ctrl-c still works to interrupt program
+
+  # https://superuser.com/questions/640338/how-to-reset-a-broken-tty/640341
+  # Reset terminal. Just in case.
+  # Run echo ^v^o. That is echo and then Ctrl-v and then Ctrl-o, Enter.
+
+  # I wanted a method of entering a letter without having to press enter aswell
+  # This way works. Allows Ctrl-c. But gives a warning in replit.
   def input_char
     state = `stty -g`
-    `stty raw -echo -icanon isig`
-    $stdin.getc # .chr
+    `stty raw -echo isig`
+    $stdin.getc.chr
   ensure
+    # Loads stty saved state
     `stty #{state}`
   end
+end
+
+# Doesn't allow Ctrl-c interrupt. No replit warning.
+def input_char_no_ctrlc
+  $stdin.getch
 end
